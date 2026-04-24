@@ -14,10 +14,8 @@
             height: 100vh; overflow: hidden; position: relative;
         }
 
-        /* Hiệu ứng hạt lấp lánh */
         #canvas { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
 
-        /* 1. MÀN HÌNH HỘP QUÀ */
         #gift-screen {
             position: fixed; inset: 0; display: flex; flex-direction: column;
             justify-content: center; align-items: center; z-index: 100;
@@ -34,7 +32,6 @@
         @keyframes bounce { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-15px) scale(1.05); } }
         #gift-screen p { margin-top: 25px; color: #d81b60; font-size: 22px; text-align: center; font-family: 'Dancing Script', cursive; }
 
-        /* 2. MÀN HÌNH LỜI CHÚC */
         #wish-screen {
             position: fixed; inset: 0; display: none;
             flex-direction: column; justify-content: center; align-items: center;
@@ -54,10 +51,8 @@
             margin-top: 25px; padding: 12px 35px; font-family: 'Dancing Script', cursive;
             font-size: 20px; border: none; background: #ff69b4; color: white;
             border-radius: 30px; cursor: pointer; display: none;
-            box-shadow: 0 5px 15px rgba(255, 105, 180, 0.3);
         }
 
-        /* 3. MÀN HÌNH ALBUM ẢNH */
         #photo-screen { display: none; opacity: 0; transition: 2s; text-align: center; width: 100%; z-index: 80; }
         .memory-sphere {
             position: relative; width: 320px; height: 320px;
@@ -79,7 +74,6 @@
         .button-controls button {
             width: 55px; height: 55px; border-radius: 50%; border: none;
             background: #ff69b4; color: #fff; font-size: 24px; cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         .title-final { font-family: 'Dancing Script', cursive; font-size: 30px; color: #d81b60; margin-top: 20px; }
 
@@ -97,7 +91,7 @@
 
     <canvas id="canvas"></canvas>
     
-    <audio id="bgMusic" src="nhạc cưới.mp3" loop></audio>
+    <audio id="bgMusic" src="nh%E1%BA%A1c%20c%C6%B0%E1%BB%9Bi.mp3" loop preload="auto"></audio>
 
     <div id="gift-screen">
         <div class="gift-box" onclick="startEverything()">
@@ -145,8 +139,13 @@
         const message = "Dì Ngọc Anh thương yêu! 🌸\n\nNgày hạnh phúc nhất đã đến rồi. Cháu chúc dì luôn ngập tràn tiếng cười và được chú yêu thương thật nhiều nhé! 💍✨\n\nMón quà này cháu tự tay làm, gói gọn những kỷ niệm rạng rỡ của dì...\n\nYêu dì của cháu nhiều lắm! ❤️";
 
         function startEverything() {
-            // Kích hoạt nhạc (bắt buộc cho mobile)
-            bgMusic.play().catch(e => console.log("Nhạc chưa phát: Đảm bảo file tên đúng nhạc cưới.mp3"));
+            // Ép nhạc chạy bằng tương tác người dùng
+            bgMusic.play().then(() => {
+                console.log("Nhạc đang phát!");
+            }).catch(e => {
+                // Nếu vẫn lỗi, thử lại lần nữa khi nhấn nút tiếp theo
+                console.log("Chờ tương tác tiếp theo");
+            });
             
             giftScreen.style.opacity = '0';
             setTimeout(() => {
@@ -166,6 +165,8 @@
         }
 
         function showPhotos() {
+            // Thử phát nhạc lần nữa nếu lần đầu bị chặn
+            bgMusic.play();
             wishScreen.style.opacity = '0';
             setTimeout(() => {
                 wishScreen.style.display = 'none';
@@ -183,7 +184,6 @@
             slides[currentIndex].classList.add('active');
         }
 
-        // Tự động chuyển ảnh mỗi 4 giây
         setInterval(() => { if (photoScreen.style.display === 'block') updateSlides('next'); }, 4000);
 
         function spawnHeart(e) {
@@ -199,7 +199,6 @@
             setTimeout(() => heart.remove(), 2500);
         }
 
-        // Hiệu ứng hạt nền
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
